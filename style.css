@@ -250,3 +250,18 @@ margin-top: 2rem;
 .footer-links a:hover {
     color: #d88ca0 !important;
 }
+.books-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smoth;
+    white-space: nowrap;
+    gap: 15px;
+    padding-bottom: 10px;
+}
+.books-container::-webkit-scrollbae{
+    height: 6px;
+}
+.books-container::-webkit-scrollbar{
+    background-color: #d88ca0;
+    border-radius: 10px;
+}
