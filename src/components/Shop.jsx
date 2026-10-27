@@ -1,0 +1,43 @@
+
+import { useState } from 'react';
+import {ProductCard} from './ProductCard';
+import { products } from '../data/products';
+
+export function Shop() {
+const [filter, setFilter] = useState('All');
+const categories = ['All', 'Books'];
+
+const filtered = filter === 'All'
+? products
+: products.filter((p) => p.category === filter);
+
+return (
+<section id="shop" className="mx-auto max-w-[1100px] px-6 py-12 ">
+<div className="mb-6 flex items-center justify-between">
+<h2 className="text-2xl font-bold text-gray-900">This week's picks</h2>
+<div className="flex gap-2">
+{categories.map((cat) => (
+<button
+key={cat}
+type="button"
+onClick={() => setFilter(cat)}
+className={`rounded-full px-4 py-1.5 text-sm transition ${
+filter === cat
+? 'bg-gray-900 text-white'
+: 'border border-gray-300 text-gray-600 hover:border-gray-400'
+}`}
+>
+{cat}
+</button>
+))}
+</div>
+</div>
+
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+{filtered.map((product) => (
+<ProductCard key={product.id} product={product} />
+))}
+</div>
+</section>
+);
+}
