@@ -1,43 +1,30 @@
 
-import { useState } from 'react';
-import {ProductCard} from './ProductCard';
-import { products } from '../data/products';
+import { useState, useEffect } from 'react'
+import { ProductCard } from './ProductCard'
+
+const categories = ['All', 'Novels', 'Non-Fiction', 'Staff Picks']
 
 export function Shop() {
-const [filter, setFilter] = useState('All');
-const categories = ['All', 'Books'];
+const [products, setProducts] = useState([])
+const [loading, setLoading] = useState(true)
+const [filter, setFilter] = useState('All')
 
-const filtered = filter === 'All'
-? products
-: products.filter((p) => p.category === filter);
+useEffect(() => {
+async function loadProducts() {
+try {
 
-return (
-<section id="shop" className="mx-auto max-w-[1100px] px-6 py-12 ">
-<div className="mb-6 flex items-center justify-between">
-<h2 className="text-2xl font-bold text-gray-900">This week's picks</h2>
-<div className="flex gap-2">
-{categories.map((cat) => (
-<button
-key={cat}
-type="button"
-onClick={() => setFilter(cat)}
-className={`rounded-full px-4 py-1.5 text-sm transition ${
-filter === cat
-? 'bg-gray-900 text-white'
-: 'border border-gray-300 text-gray-600 hover:border-gray-400'
-}`}
->
-{cat}
-</button>
-))}
-</div>
-</div>
+const response = await fetch('http://localhost:3000/api/products')
+const data = await response.json()
+setProducts(data)
+} catch (err) {
+console.error('Failed to load products', err)
+} finally {
+setLoading(false)
+}
+}
 
-<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-{filtered.map((product) => (
-<ProductCard key={product.id} product={product} />
-))}
-</div>
-</section>
-);
+loadProducts()
+}, [])
+
+const filtered = filter === 'All' ? products : products.filter((p) => p.category === filter)
 }

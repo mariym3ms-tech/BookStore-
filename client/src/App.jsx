@@ -10,9 +10,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[4A2332] text-white">
       <Header/>
+      <main>
       <Hero/>
       <Shop/>
       <About/>
+      </main>
       <Footer/>
     </div>
       )
