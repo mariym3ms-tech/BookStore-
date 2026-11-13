@@ -5,6 +5,7 @@ import { Shop } from './components/Shop';
 import { About } from './components/About';
 import { Footer } from './components/Footer';
 import { Login } from './components/Login';
+import { ProductDetail } from './components/ProductDetail';
 
 function Home() {
 return (
@@ -23,6 +24,7 @@ return (
 <Routes>
 <Route path="/" element={<Home />} />
 <Route path="/login" element={<Login />} />
+<Route path="/products/:slug" element={<ProductDetail />} />
 </Routes>
 <Footer />
 </BrowserRouter>
