@@ -1,17 +1,39 @@
-import { randomUUID } from 'node:crypto'
-import { db } from './index.js'
-import { products } from './schema.js'
-import { productsData } from './products.data.js'
+import { db } from './index.js';
+import { products, productImages } from './schema.js';
+import { productsData } from './products.data.js';
+import { randomUUID } from 'crypto';
 
 async function seed() {
-console.log('Seeding products...')
+try {
 for (const p of productsData) {
-await db
+const id = randomUUID();
+
+const [inserted] = await db
 .insert(products)
-.values({ id: randomUUID(), ...p })
-.onConflictDoNothing({ target: products.slug })
+.values({
+id,
+...p,
+price: Number(p.price),
+})
+.onConflictDoNothing()
+.returning();
+
+if (inserted) {
+await db.insert(productImages).values({
+id: randomUUID(),
+productId: inserted.id,
+url: inserted.imageUrl,
+sortOrder: 0,
+});
 }
-console.log(`Done - seeded ${productsData.length} products.`)
-process.exit(0)
 }
-seed()
+
+console.log(`Done - seeded ${productsData.length} products.`);
+} catch (error) {
+console.error('Seed failed:', error);
+} finally {
+process.exit(0);
+}
+}
+
+seed();

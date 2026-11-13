@@ -1,4 +1,5 @@
-import { pgTable, text, timestamp, boolean, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { integer } from 'drizzle-orm/pg-core'; 
 
 export const user = pgTable('user', {
 id: text('id').primaryKey(),
@@ -36,6 +37,7 @@ password: text('password'),
 createdAt: timestamp('created_at').notNull().defaultNow(),
 updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
+
 export const verification = pgTable('verification', {
 id: text('id').primaryKey(),
 identifier: text('identifier').notNull(),
@@ -44,15 +46,25 @@ expiresAt: timestamp('expires_at').notNull(),
 createdAt: timestamp('created_at').notNull().defaultNow(),
 updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
+
 export const products = pgTable('products', {
 id: text('id').primaryKey(),
 name: text('name').notNull(),
+slug: text('slug').unique(),
 author: text('author'),
-description: text('description'),
-price: text('price').notNull(),
+description: text('description').default(''),
+tagline: text('tagline'),
+price: integer('price').notNull(),
+stock: integer('stock').notNull().default(0),
 imageUrl: text('image_url'),
 category: text('category'),
+featured: boolean('featured').notNull().default(false),
 createdAt: timestamp('created_at').notNull().defaultNow(),
 updatedAt: timestamp('updated_at').notNull().defaultNow(),
-}
-);
+});
+export const productImages = pgTable('product_images', {
+id: text('id').primaryKey(),
+productId: text('product_id').notNull().references(() => products.id, { onDelete: 'cascade' }),
+url: text('url').notNull(),
+sortOrder: integer('sort_order').notNull().default(0),
+});

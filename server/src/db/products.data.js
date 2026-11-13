@@ -2,6 +2,8 @@ export const productsData = [
 {
 slug: 'architecture-of-memory',
 name: 'Architecture of memory',
+description: 'An in-depth exploration of how memories shape the spaces we inhabit and how architecture influences our recollection.',
+
 tagline: 'My Journey in Architecture',
 category: 'Non-Fiction',
 price: '25.00',
@@ -12,16 +14,20 @@ featured: true,
 {
 slug: 'echoes-of-quiet-day',
 name: 'Echoes of quiet day',
+description: 'A heartwarming collection of short stories that capture the beauty in mundane, everyday moments of life.',
+
 tagline: 'Five Cozy Short Stories for Peaceful Evenings',
 category: 'Novels',
 price: '20.00',
 imageUrl: '/images/products/echoes-quiet.jpg',
-stock: 20,
-featured: true,
+stock: 20, 
+featured: false,
 },
 {
 slug: 'the-amber-city',
 name: 'The amber city',
+description: 'A thrilling mystery novel where a historian uncovers a secret hidden beneath the streets of an ancient city.',
+
 tagline: 'A mysterious journey through time',
 category: 'Novels',
 price: '22.00',
@@ -32,6 +38,7 @@ featured: true,
 {
 slug: 'the-art-of-slow-living',
 name: 'The art of slow living',
+description: 'A practical guide and coloring book designed to help you disconnect from the digital world and find peace in the present moment.',
 tagline: 'A Cozy & Elegant Coloring Book for Relaxation',
 category: 'Staff Picks',
 price: '18.00',
@@ -42,6 +49,7 @@ featured: true,
 {
 slug: 'wild-flowers-bloom',
 name: 'Wild Flowers Bloom',
+description: 'A visually stunning collection of nature photography and poetry celebrating the untamed beauty of wild flora.',
 tagline: 'A beautiful collection of nature',
 category: 'Staff Picks',
 price: '15.00',
