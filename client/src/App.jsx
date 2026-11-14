@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Shop } from './components/Shop';
@@ -6,6 +7,7 @@ import { About } from './components/About';
 import { Footer } from './components/Footer';
 import { Login } from './components/Login';
 import { ProductDetail } from './components/ProductDetail';
+import { Cart } from './components/Cart';
 
 function Home() {
 return (
@@ -21,11 +23,14 @@ export default function App() {
 return (
 <BrowserRouter>
 <Header />
+
 <Routes>
 <Route path="/" element={<Home />} />
 <Route path="/login" element={<Login />} />
+<Route path="/cart" element={<Cart />} />
 <Route path="/products/:slug" element={<ProductDetail />} />
 </Routes>
+
 <Footer />
 </BrowserRouter>
 );
