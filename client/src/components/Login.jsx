@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn, signUp } from '../lib/auth-client';
 
-export  function Login({Mode}) {
+export function Login() {
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 const [name, setName] = useState('');
 
-const [authMode, setMode] = useState('signin');
-
+const [authMode, setAuthMode] = useState('signin');
 const [error, setError] = useState(null);
 const [isBusy, setIsBusy] = useState(false);
 
@@ -21,92 +20,120 @@ setIsBusy(true);
 
 try {
 let result;
-if (mode === 'signup') {
-result = await signUp.email({ email, password, name });
-}
-else {
-result = await signIn.email({ email, password });
+
+if (authMode === 'signup') {
+result = await signUp.email({
+email,
+password,
+name,
+});
+} else {
+result = await signIn.email({
+email,
+password,
+});
 }
 
-if (result.error) {
-setError(result.error.message ?? 'That did not work. Try again?');
+if (result?.error) {
+setError(
+result.error.message || 'Something went wrong. Try again.'
+);
 return;
 }
 
 navigate('/');
-
 } catch (err) {
-setError('Something went wrong. Try again.');
+console.error('Authentication error:', err);
+setError(err.message || 'Something went wrong. Try again.');
 } finally {
 setIsBusy(false);
 }
 }
 
+function toggleMode() {
+setAuthMode(authMode === 'signin' ? 'signup' : 'signin');
+setError(null);
+}
+
 return (
 <div className="mx-auto max-w-md px-6 py-16">
-<h1 className="text-3xl font-bold mb-6">
-{mode === 'signin' ? 'Sign In' : 'Create an Account'}
+<h1 className="mb-6 text-3xl font-bold">
+{authMode === 'signin'
+? 'Sign In'
+: 'Create an Account'}
 </h1>
 
 {error && (
-<div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+<div className="mb-4 rounded bg-red-100 p-3 text-red-700">
 {error}
 </div>
 )}
 
 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-{mode === 'signup' && (
+{authMode === 'signup' && (
 <div>
-<label className="block mb-1 text-sm font-medium">Name</label>
+<label className="mb-1 block text-sm font-medium">
+Name
+</label>
 <input
 type="text"
 value={name}
 onChange={(e) => setName(e.target.value)}
 required
-className="w-full border p-2 rounded"
+className="w-full rounded border p-2"
+placeholder="Your name"
 />
 </div>
 )}
 
 <div>
-<label className="block mb-1 text-sm font-medium">Email</label>
+<label className="mb-1 block text-sm font-medium">
+Email
+</label>
 <input
 type="email"
 value={email}
 onChange={(e) => setEmail(e.target.value)}
 required
-className="w-full border p-2 rounded"
+className="w-full rounded border p-2"
+placeholder="Enter your email"
 />
 </div>
 
 <div>
-<label className="block mb-1 text-sm font-medium">Password</label>
+<label className="mb-1 block text-sm font-medium">
+Password
+</label>
 <input
 type="password"
 value={password}
 onChange={(e) => setPassword(e.target.value)}
 required
-className="w-full border p-2 rounded"
+className="w-full rounded border p-2"
+placeholder="Enter your password"
 />
 </div>
 
 <button
 type="submit"
 disabled={isBusy}
-className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
+className="rounded bg-blue-600 p-2 text-white hover:bg-blue-700 disabled:opacity-50"
 >
-{isBusy ? 'Loading...' : (mode === 'signin' ? 'Sign In' : 'Sign Up')}
+{isBusy
+? 'Loading...'
+: authMode === 'signin'
+? 'Sign In'
+: 'Sign Up'}
 </button>
 </form>
 
 <div className="mt-6 text-center">
 <button
 type="button"
-onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+onClick={toggleMode}
 className="text-blue-600 hover:underline"
 >
-{mode === 'signin'
+{authMode === 'signin'
 ? "Don't have an account? Sign up"
 : 'Already have an account? Sign in'}
 </button>
