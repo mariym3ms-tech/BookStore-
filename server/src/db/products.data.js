@@ -7,7 +7,7 @@ description: 'An in-depth exploration of how memories shape the spaces we inhabi
 tagline: 'My Journey in Architecture',
 category: 'Non-Fiction',
 price: '25.00',
-imageUrl: '/images/Booksproducts/Architecture-memory.jpg',
+imageUrl: '/images/Booksproducts/Architecture-of-memory.jpg',
 stock: 15,
 featured: true,
 },
