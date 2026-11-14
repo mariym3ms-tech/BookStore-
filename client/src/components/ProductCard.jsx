@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom';
 import { formatPrice } from '../lib/format';
 
 export const ProductCard = ({ product }) => {
+if (!product || !product.slug) {
+console.error('Product is missing slug:', product);
+return null;
+}
+
 return (
 <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:shadow-lg">
-
 <Link to={`/products/${product.slug}`}>
 <img
 src={
@@ -29,7 +33,6 @@ className="h-80 w-full rounded-t-lg object-cover"
 </p>
 </div>
 </Link>
-
 </article>
 );
-};
+}

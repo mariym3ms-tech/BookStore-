@@ -1,44 +1,66 @@
 
-import React, { useState, useEffect } from 'react';
-import {ProductCard} from './ProductCard';
+ import React, { useState, useEffect } from 'react';
+import { ProductCard } from './ProductCard';
 
-export  function Shop() {
+export function Shop() {
 const [products, setProducts] = useState([]);
 const [filter, setFilter] = useState('All');
 const [loading, setLoading] = useState(true);
+const [error, setError] = useState('');
 
-// Categories list for your bookstore
-const categories = ['All', 'Fiction', 'Non-Fiction', 'Bestsellers', 'Staff picks'];
+const categories = [
+'All',
+'Fiction',
+'Non-Fiction',
+'Novels',
+'Bestsellers',
+'Staff Picks'
+];
 
-// Fetching or simulating products data
 useEffect(() => {
-// You can replace this with your actual API or products data import
-setTimeout(() => {
-setProducts([
-{ id: 1, title: 'Architecture of memory', category: 'Fiction', price: 45 ,imageUrl:'/images/Booksproducts/Architecture-of-memory.jpg' },
-{ id: 2, title: 'Echoes of quiet days', category: 'Non-Fiction', price: 60 ,imageUrl:'/images/Booksproducts/Echoes-of-quiet-days.jpg' },
-{ id: 3, title: 'The amber city', category: 'Sci-Fi', price: 75 ,imageUrl:'/images/Booksproducts/the-amber-city.jpg' },
-{ id: 4, title: 'The art of slow living', category: 'Bestsellers', price: 40 ,imageUrl: '/images/Booksproducts/the-art-of-slow-living.jpg' },
-{ id: 5, title: 'When Wildflowers Bloom' ,category: 'staff Picks' , price: 50 ,imageUrl: '/images/Booksproducts/When-Wildflowers-Bloom.jpg'},
-]);
+async function fetchProducts() {
+try {
+setLoading(true);
+setError('');
 
+const response = await fetch('/api/products');
 
+if (!response.ok) {
+throw new Error('Failed to fetch products');
+}
+
+const data = await response.json();
+
+setProducts(data);
+} catch (err) {
+console.error('Error fetching products:', err);
+setError('Unable to load books. Please try again.');
+} finally {
 setLoading(false);
-}, 1000);
+}
+}
+
+fetchProducts();
 }, []);
 
-// Filter products based on selected category
-const filtered = filter === 'All'
+const filtered =
+filter === 'All'
 ? products
-: products.filter(p => p.category === filter);
+: products.filter(
+(product) =>
+product.category?.toLowerCase() ===
+filter.toLowerCase()
+);
 
 return (
 <div className="max-w-7xl mx-auto px-4 py-8">
-{/* Header and Filter Buttons */}
-<div className="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-<h2 className="text-2xl font-bold text-gray-800">Explore Our Bookstore</h2>
 
-{/* Categories Filter */}
+<div className="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+
+<h2 className="text-2xl font-bold text-gray-800">
+Explore Our Bookstore
+</h2>
+
 <div className="flex flex-wrap gap-2">
 {categories.map((cat) => (
 <button
@@ -57,16 +79,29 @@ filter === cat
 </div>
 </div>
 
-{/* Loading State or Products Grid */}
 {loading ? (
-<p className="text-center text-gray-500 py-12">Loading books...</p>
+<p className="text-center text-gray-500 py-12">
+Loading books...
+</p>
+) : error ? (
+<p className="text-center text-red-500 py-12">
+{error}
+</p>
+) : filtered.length === 0 ? (
+<p className="text-center text-gray-500 py-12">
+No books found.
+</p>
 ) : (
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 {filtered.map((product) => (
-<ProductCard key={product.id} product={product} />
+<ProductCard
+key={product.id}
+product={product}
+/>
 ))}
 </div>
 )}
+
 </div>
 );
 }

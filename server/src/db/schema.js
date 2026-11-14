@@ -50,7 +50,7 @@ updatedAt: timestamp('updated_at').notNull().defaultNow(),
 export const products = pgTable('products', {
 id: text('id').primaryKey(),
 name: text('name').notNull(),
-slug: text('slug').unique(),
+slug: text('slug').unique().unique(),
 author: text('author'),
 description: text('description').default(''),
 tagline: text('tagline'),
