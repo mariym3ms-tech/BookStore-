@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Shop } from './components/Shop';

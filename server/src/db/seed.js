@@ -6,33 +6,33 @@ import { randomUUID } from 'crypto';
 async function seed() {
 try {
 for (const p of productsData) {
-const id = randomUUID();
-
-const [inserted] = await db
-.insert(products)
-.values({
-id,
+const productValues = {
 ...p,
 price: Number(p.price),
+updatedAt: new Date(),
+};
+
+const [savedProduct] = await db
+.insert(products)
+.values({
+id: randomUUID(),
+...productValues,
 })
-.onConflictDoNothing()
+.onConflictDoUpdate({
+target: products.slug,
+set: productValues,
+})
 .returning();
 
-if (inserted) {
-await db.insert(productImages).values({
-id: randomUUID(),
-productId: inserted.id,
-url: inserted.imageUrl,
-sortOrder: 0,
-});
-}
+console.log(`Updated: ${savedProduct.name}`);
 }
 
-console.log(`Done - seeded ${productsData.length} products.`);
+console.log('Done - products updated successfully.');
 } catch (error) {
 console.error('Seed failed:', error);
+process.exitCode = 1;
 } finally {
-process.exit(0);
+process.exit();
 }
 }
 
